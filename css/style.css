@@ -43,6 +43,8 @@ html, body {
   -webkit-user-select: none;
 }
 
+a-scene canvas { touch-action: none; }
+
 /* ---------- start screen ---------- */
 .start-screen {
   position: absolute;
@@ -80,6 +82,29 @@ h1 {
 .link { color: var(--mint); font-weight: 700; font-size: 0.95rem; }
 
 .note { margin: 0; font-size: 0.85rem; line-height: 1.4; opacity: 0.85; }
+
+.animal-picker {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.animal-picker select {
+  pointer-events: auto;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 2px solid rgba(15, 61, 62, 0.35);
+  border-radius: 10px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  touch-action: manipulation;
+}
 
 /* ---------- HUD ---------- */
 .hud {
@@ -119,6 +144,12 @@ h1 {
   padding: 10px;
   border-radius: 24px;
   background: rgba(15, 61, 62, 0.78);
+}
+
+.hud-animal-picker {
+  flex: 1 1 100%;
+  min-width: min(100%, 220px);
+  color: var(--paper);
 }
 
 /* ---------- buttons ---------- */

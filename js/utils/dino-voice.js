@@ -6,6 +6,7 @@
   let master = null;
   let noiseBuf = null;
   let muted = false;
+  let roarAudio = null;
 
   function ensure() {
     if (muted) return null;
@@ -50,7 +51,7 @@
   }
 
   /** "RAWR!": swept sawtooth + growl wobble + vowel formants (ah -> oh) + breath noise. */
-  function roar(pitch = 1) {
+  function synthesizedRoar(pitch = 1) {
     const c = ensure();
     if (!c) return;
     const t = c.currentTime + 0.01;
@@ -90,6 +91,30 @@
     osc.stop(t + dur + 0.05);
     lfo.stop(t + dur + 0.05);
     noise(c, t, dur * 0.8, 1800, 0.8, 0.22);
+  }
+
+  function roar(pitch = 1) {
+    if (muted) return;
+    if (!roarAudio) {
+      synthesizedRoar(pitch);
+      return;
+    }
+    roarAudio.currentTime = 0;
+    roarAudio.playbackRate = Math.min(1.6, Math.max(0.55, pitch));
+    const playback = roarAudio.play();
+    if (playback && playback.catch) playback.catch(() => synthesizedRoar(pitch));
+  }
+
+  function setRoarSource(src) {
+    if (roarAudio) {
+      roarAudio.pause();
+      roarAudio = null;
+    }
+    if (src) {
+      roarAudio = new Audio(src);
+      roarAudio.preload = 'auto';
+      roarAudio.volume = 0.85;
+    }
   }
 
   /** Tiny happy chirp. */
@@ -158,7 +183,11 @@
   window.DinoVoice = {
     unlock() { ensure(); },
     roar, squeak, grumble, stomp,
-    setMuted(value) { muted = !!value; },
+    setMuted(value) {
+      muted = !!value;
+      if (muted && roarAudio) roarAudio.pause();
+    },
+    setRoarSource,
     isMuted() { return muted; }
   };
 })();

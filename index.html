@@ -43,6 +43,10 @@
         <div class="start-emoji" aria-hidden="true">🦖</div>
         <h1>AR Dino</h1>
         <p class="lead">Put a tiny, very dramatic dinosaur on your floor.</p>
+        <label class="animal-picker" for="animal-select">
+          <span>Dinosaur</span>
+          <select id="animal-select"></select>
+        </label>
         <button id="btn-start-ar" type="button" class="btn btn-primary btn-wide">Start AR</button>
         <button id="btn-preview" type="button" class="btn btn-wide">Preview without AR</button>
         <p id="support-note" class="note" role="status"></p>
@@ -67,6 +71,10 @@
           <button id="btn-rot-left" type="button" class="btn btn-round" aria-label="Rotate left">⟲</button>
           <button id="btn-rot-right" type="button" class="btn btn-round" aria-label="Rotate right">⟳</button>
           <button id="btn-move" type="button" class="btn">New spot</button>
+          <label class="animal-picker hud-animal-picker" for="animal-select-live">
+            <span>Dinosaur</span>
+            <select id="animal-select-live"></select>
+          </label>
         </div>
       </div>
     </div>
@@ -95,7 +103,9 @@
 
     <!-- Surface reticle (AR) and the star of the show -->
     <a-entity id="reticle" surface-placement></a-entity>
-    <a-entity id="dino" cute-dino dino-controller="reticle: #reticle"></a-entity>
+    <a-entity id="dino" cute-dino dino-controller="reticle: #reticle">
+      <a-entity id="imported-model"></a-entity>
+    </a-entity>
   </a-scene>
 </body>
 </html>

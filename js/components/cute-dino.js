@@ -26,6 +26,12 @@
       this.el.setObject3D('dino', this.rig.model);
       this.el.setObject3D('dino-shadow', this.rig.shadow);
       this.el.object3D.visible = false;
+      this.importedModelEl = this.el.querySelector('#imported-model');
+      this.activeAnimal = null;
+      this.onImportedModelLoaded = this.onImportedModelLoaded.bind(this);
+      this.onImportedModelError = this.onImportedModelError.bind(this);
+      this.importedModelEl.addEventListener('model-loaded', this.onImportedModelLoaded);
+      this.importedModelEl.addEventListener('model-error', this.onImportedModelError);
 
       this.placed = false;
       this.userScale = CFG.startScale;
@@ -64,11 +70,17 @@
         'dino:reset': this.onReset.bind(this)
       };
       Object.keys(this.handlers).forEach((n) => this.el.addEventListener(n, this.handlers[n]));
+      this.onAnimalSelected = this.onAnimalSelected.bind(this);
+      this.el.sceneEl.addEventListener('ui:animal', this.onAnimalSelected);
+      this.applyAnimal(window.APP_CONFIG.animals[0].id);
       this.applyScale();
     },
 
     remove() {
       Object.keys(this.handlers).forEach((n) => this.el.removeEventListener(n, this.handlers[n]));
+      this.el.sceneEl.removeEventListener('ui:animal', this.onAnimalSelected);
+      this.importedModelEl.removeEventListener('model-loaded', this.onImportedModelLoaded);
+      this.importedModelEl.removeEventListener('model-error', this.onImportedModelError);
       this.el.removeObject3D('dino');
       this.el.removeObject3D('dino-shadow');
       this.rig.own.geos.forEach((g) => g.dispose());
@@ -87,6 +99,40 @@
 
     voicePitch() {
       return Core.voicePitch(this.userScale);
+    },
+
+    applyAnimal(id) {
+      const animal = window.APP_CONFIG.animals.find((item) => item.id === id);
+      if (!animal) return;
+      this.activeAnimal = animal;
+      Voice.setRoarSource(animal.roar);
+      if (animal.model === 'procedural') {
+        this.importedModelEl.removeAttribute('gltf-model');
+        this.importedModelEl.object3D.visible = false;
+        this.rig.model.visible = true;
+      } else {
+        this.rig.model.visible = false;
+        this.importedModelEl.object3D.visible = false;
+        this.importedModelEl.setAttribute('gltf-model', animal.model);
+      }
+      this.el.sceneEl.emit('animal:changed', { id: animal.id, label: animal.label }, false);
+    },
+
+    onAnimalSelected(e) {
+      this.applyAnimal(e.detail.id);
+    },
+
+    onImportedModelLoaded() {
+      if (this.activeAnimal && this.activeAnimal.model !== 'procedural') {
+        this.importedModelEl.object3D.visible = true;
+      }
+    },
+
+    onImportedModelError() {
+      if (!this.activeAnimal || this.activeAnimal.model === 'procedural') return;
+      const failedId = this.activeAnimal.id;
+      this.applyAnimal(window.APP_CONFIG.animals[0].id);
+      this.el.sceneEl.emit('animal:load-error', { id: failedId }, false);
     },
 
     // ---------- event handlers ----------

@@ -20,13 +20,31 @@
       startAr: $('btn-start-ar'), preview: $('btn-preview'), place: $('btn-place'), tools: $('tools'),
       move: $('btn-move'), mute: $('btn-mute'), exit: $('btn-exit')
     };
+    const animalSelects = [$('animal-select'), $('animal-select-live')];
     let hintTimer = 0;
     let noHitTest = false;
 
     // Taps on overlay controls must not also reach the 3D scene (WebXR "select").
-    document.querySelectorAll('.btn').forEach((b) => b.addEventListener('beforexrselect', (e) => e.preventDefault()));
+    document.querySelectorAll('.btn, .animal-picker select').forEach((b) => b.addEventListener('beforexrselect', (e) => e.preventDefault()));
 
     const emit = (name, detail) => sceneEl.emit(name, detail || {}, false);
+    window.APP_CONFIG.animals.forEach((animal) => {
+      animalSelects.forEach((select) => {
+        const option = document.createElement('option');
+        option.value = animal.id;
+        option.textContent = animal.label;
+        select.appendChild(option);
+      });
+    });
+    animalSelects.forEach((select) => {
+      select.addEventListener('change', () => emit('ui:animal', { id: select.value }));
+    });
+    sceneEl.addEventListener('animal:changed', (e) => {
+      animalSelects.forEach((select) => { select.value = e.detail.id; });
+    });
+    sceneEl.addEventListener('animal:load-error', () => {
+      setStatus('Could not load that model. Check its file path and use a GLB model.');
+    });
 
     // ---- buttons ----
     el.startAr.addEventListener('click', () => {

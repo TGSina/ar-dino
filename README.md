@@ -4,7 +4,7 @@ A WebXR / A-Frame experience: detect the floor with your phone camera, drop a cu
 hear it roar, and move / resize / rotate it with natural touch gestures.
 Supported: **Chrome on Android with Google Play Services for AR** (HTTPS). Everything else gets a non-AR preview.
 
-See **GUIDE.md** for the full step-by-step setup, GitHub Pages deployment and phone testing.
+See [Testing](docs/TESTING.md) and [model and sound setup](docs/ANIMALS.md) for the current project instructions.
 
 ## Run locally
 ```bash
@@ -37,10 +37,13 @@ tests/                  node --test unit tests
 ```
 
 ## Save the 3D model
-`/export.html` saves the dinosaur (and the example chick) as GLB, OBJ+MTL or STL. See docs/MODEL_EXPORT.md.
+`/export.html` saves the dinosaur (and the example chick) as GLB, OBJ+MTL or STL.
+
+## Add a downloaded model or roar
+Put optimized `.glb` models and licensed audio under `assets/`, then add entries to `APP_CONFIG.animals` in `js/config.js`. OBJ and FBX should be converted to GLB first. See [docs/ANIMALS.md](docs/ANIMALS.md) for copyable entries and the phone test steps.
 
 ## Share with a free HTTPS link (Cloudflare)
-`npm run build && npx wrangler deploy`, or a Quick Tunnel for local testing. See docs/CLOUDFLARE.md.
+`npm run build && npx wrangler deploy`, or run `npm run cf:tunnel` for local phone testing.
 
 ## Test
 `npm test` · `npm run check`

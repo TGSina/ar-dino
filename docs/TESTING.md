@@ -20,6 +20,8 @@
 - [ ] One finger drag starting on the dino moves it without a jump; releasing drops it
 - [ ] Pinch resizes smoothly (limits 0.25x–4x); voice gets deeper when big
 - [ ] Two-finger twist rotates; the leftover finger does not start a drag/tap
+- [ ] Imported GLB dinosaur can be selected before and during the session, placed, dragged, resized and rotated
+- [ ] Selected local roar plays from the Roar button and a dino tap; mute stops it
 - [ ] Buttons (Roar, +/−, rotate, New spot, mute, exit) work and do not also place/move the dino
 - [ ] Exit AR returns to the start screen; Start AR again works (no stuck state)
 - [ ] Background the tab and return; 5-minute session keeps a steady frame rate (use `?debug=1`)

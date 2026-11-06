@@ -26,20 +26,20 @@ AFRAME.registerComponent('touch-gestures', {
     this.onContext = (e) => e.preventDefault();
 
     const s = this.surface;
-    s.addEventListener('pointerdown', this.onDown);
-    s.addEventListener('pointermove', this.onMove);
-    s.addEventListener('pointerup', this.onUp);
-    s.addEventListener('pointercancel', this.onUp);
+    window.addEventListener('pointerdown', this.onDown, true);
+    window.addEventListener('pointermove', this.onMove, true);
+    window.addEventListener('pointerup', this.onUp, true);
+    window.addEventListener('pointercancel', this.onUp, true);
     s.addEventListener('wheel', this.onWheel, { passive: false });
     s.addEventListener('contextmenu', this.onContext);
   },
 
   remove() {
     const s = this.surface;
-    s.removeEventListener('pointerdown', this.onDown);
-    s.removeEventListener('pointermove', this.onMove);
-    s.removeEventListener('pointerup', this.onUp);
-    s.removeEventListener('pointercancel', this.onUp);
+    window.removeEventListener('pointerdown', this.onDown, true);
+    window.removeEventListener('pointermove', this.onMove, true);
+    window.removeEventListener('pointerup', this.onUp, true);
+    window.removeEventListener('pointercancel', this.onUp, true);
     s.removeEventListener('wheel', this.onWheel);
     s.removeEventListener('contextmenu', this.onContext);
   },
@@ -50,7 +50,10 @@ AFRAME.registerComponent('touch-gestures', {
 
   onDown(e) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    try { this.surface.setPointerCapture(e.pointerId); } catch (err) { /* not fatal */ }
+    if (e.target.closest && e.target.closest('button, a, input, select, textarea, [data-gesture-ignore]')) return;
+    try {
+      if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
+    } catch (err) { /* Pointer capture is optional; window listeners still track the gesture. */ }
     this.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, st: performance.now() });
     const n = this.pointers.size;
     if (n === 1) {

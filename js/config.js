@@ -14,6 +14,26 @@ window.APP_CONFIG = Object.freeze({
     hitRadius: 0.3,     // m, generous touch target around the dino
     hitCenterY: 0.3     // m, height of that touch sphere
   }),
+  animals: Object.freeze([
+    Object.freeze({
+      id: 'classic-dino',
+      label: 'Classic Dino',
+      model: 'procedural',
+      roar: null
+    }),
+    Object.freeze({
+      id: 'raptor',
+      label: 'Raptor',
+      model: './assets/models/armor_dinasour.glb',
+      roar: './assets/audio/dragon-studio-dinosaur-roar-390283.mp3'
+  }),
+  Object.freeze({
+      id: 'trex',
+      label: 'Trex',
+      model: './assets/models/t-rex_3d_scan.glb',
+      roar: './assets/audio/Dinosaur Roar - QuickSounds.com.mp3'
+  }),
+  ]),
   gestures: Object.freeze({
     tapMaxMs: 280,
     tapMaxMovePx: 10,
