@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers + static assets: serves ./dist, no Worker code needed.
+  // The name becomes https://ar-dino.<your-account-subdomain>.workers.dev
+  "name": "ar-dino",
+  "compatibility_date": "2026-11-05",
+  "assets": {
+    "directory": "./dist"
+  }
+}

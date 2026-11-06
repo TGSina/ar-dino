@@ -1,0 +1,160 @@
+/* Chunky, friendly controls that stay readable over a live camera feed. */
+:root {
+  --ink: #0f3d3e;
+  --ink-soft: #2d6a6b;
+  --mint: #b6f2c8;
+  --sun: #ffd23f;
+  --sun-deep: #f5b700;
+  --paper: #f7fff9;
+  --shadow: 0 3px 0 rgba(15, 61, 62, 0.35);
+  --radius: 18px;
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.is-hidden { display: none !important; }
+
+/* Overlay root ignores pointer events; only interactive children opt in. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  color: var(--ink);
+}
+
+.touch-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ---------- start screen ---------- */
+.start-screen {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: auto;
+  background: linear-gradient(170deg, #0f3d3e 0%, #1c6b5a 55%, #4fb477 100%);
+}
+
+.start-card {
+  width: min(100%, 360px);
+  display: grid;
+  gap: 12px;
+  text-align: center;
+  color: var(--paper);
+}
+
+.start-emoji {
+  font-size: 88px;
+  line-height: 1;
+  animation: wobble 2.4s ease-in-out infinite;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  letter-spacing: 0.01em;
+  font-weight: 900;
+}
+
+.lead { margin: 0 0 8px; font-size: 1.1rem; line-height: 1.4; }
+
+.link { color: var(--mint); font-weight: 700; font-size: 0.95rem; }
+
+.note { margin: 0; font-size: 0.85rem; line-height: 1.4; opacity: 0.85; }
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+}
+
+.hud-top { display: flex; gap: 8px; align-items: flex-start; }
+
+.status {
+  flex: 1;
+  pointer-events: none;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: rgba(15, 61, 62, 0.82);
+  color: var(--paper);
+  font-size: 0.98rem;
+  line-height: 1.35;
+  min-height: 44px;
+}
+
+.hud-bottom {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 24px;
+  background: rgba(15, 61, 62, 0.78);
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  pointer-events: auto;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--mint);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(15, 61, 62, 0.35); }
+.btn:focus-visible { outline: 3px solid var(--paper); outline-offset: 2px; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary { background: var(--sun); }
+.btn-primary:hover { background: var(--sun-deep); }
+.btn-round { padding: 0; width: 48px; font-size: 1.3rem; }
+.btn-wide { width: 100%; min-height: 54px; font-size: 1.1rem; }
+
+.hud-bottom > .btn-wide { max-width: 340px; }
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50% { transform: rotate(6deg) translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-emoji { animation: none; }
+}

@@ -1,8 +1,0 @@
-Use this .md document to give me step by step full guide plus codes and all needed files and git commands to set up a AFrame project idea and deploy it on my github pages and test.
-
-The project idea is this:
-
-it is ar-animal that the goal is to use plane detection on ar from the phone camera in chrome, to put a walking animal simulation on it. It is meant to be funny and cute. It should has voice that we expect from that animal. and it should be scaled or rotated or repositioned by best practive pinch and touch movements on the phone.
-For now we target to put one animal in the game, and that is a Dinasor!
-
-Go on and implement it plus the guide for me to use all your given files.
